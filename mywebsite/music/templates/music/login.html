@@ -1,0 +1,26 @@
+{% extends 'music/base.html'%}
+{% block title%}login Page
+{% endblock %}
+{%block body%}
+<div class="container">
+	<h1>Welcome</h1>
+	<p>You can login here</p>
+	<h2>login</h2>
+	<form id="userform" method="post">
+	$(document).on('submit',#userform',funtion(e)
+	{
+
+
+	e.preventDefault();
+
+
+		
+
+		{% csrf_token %}
+		<!--form as paragraph-->
+		{{form.as_p}}
+	<button type="submit">Login</button>	
+
+	</form>
+</div>
+{%endblock%}

@@ -1,0 +1,50 @@
+
+{% extends 'music/base.html' %}
+{% block title%}MusicInfos.com
+{% endblock %}
+{%block body%}
+	{%if object_list%}
+		
+		<div class="container">
+		
+			{% for b in object_list %}
+			
+			
+			<div class="col-md-4">
+			
+			<!-- <div class="thumbnail" style="height:100px width:100px">-->
+			<div class="well well-md">
+			<a href="{% url 'music:detail' b.id %}"><img src="{{b.album_logo.url}}" class="img-rounded" alt="Image Not Available" width="300" height="300">
+			</a><h2>{{b.album_title}}</h2><h4>{{b.artist}}</h4>
+			<br>
+			<a href="{% url 'music:detail' b.pk %}" class="btn btn-primary btn-sm"> VIew Details</a>
+
+			<form action="{%url 'music:album-delete' b.id%}" method="POST" style="display: inline;">
+			{%csrf_token%}<button type="submit" class="btn btn-default btn-sm">
+			<span class="glyphicon glyphicon-trash"></span>
+			</button>
+			</form>
+			<a href="#" class="btn btn-default btn-sm btn-favourite">
+			<span class="glyphicon glyphicon-star {% if b.is_fav %} active{%endif%}"></span>
+			</a>
+			<!-- </div>
+			</div> -->
+			</div>
+			</div>
+			
+
+			
+
+			
+
+			
+
+
+			{% endfor %}
+		</div>
+			
+
+	{%else%}
+		<h3> You dont have any albums</h3>
+	{%endif%}
+{%endblock%}

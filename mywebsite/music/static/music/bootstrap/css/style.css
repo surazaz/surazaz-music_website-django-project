@@ -1,0 +1,28 @@
+body{
+	margin: 0px !important;
+	padding: 0px !important;
+}
+.navbar{
+	background-color: blue !important;
+	border:0px;
+	border-radius: 0px;
+	height: 80px;
+}
+.nav>li>a{
+	color: #FFF !important;
+}
+.nav{
+	float: right;
+}
+.collapse{
+	margin-top:2.3%;
+}
+.navbar-header{
+	margin-left: 4% !important;
+}
+.navbar-brand>img{
+	width: 28%;
+}
+.active>a{
+	background-color: #000 !important;
+}

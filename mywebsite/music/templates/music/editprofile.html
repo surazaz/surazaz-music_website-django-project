@@ -1,0 +1,16 @@
+{% extends 'music/base.html' %}
+{%block title%}
+<title>Profile</title>
+{%endblock%}
+{%block body%}
+<div class="container">
+<form method="POST">
+{%csrf_token%}
+{{form.as_p}}
+
+<a href="{%url 'music:changepassword'%}">Click here to change your Password</a>
+<br>
+<button type="submit">Submit</button>
+</form>
+</div>
+{%endblock%}

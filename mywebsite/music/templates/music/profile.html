@@ -1,0 +1,16 @@
+{% extends 'music/base.html' %}
+{%block title%}
+<title>Profile</title>
+{%endblock%}
+{%block body%}
+<div class="container">
+<h1>Here is your Profile</h1>
+<p>Username:{{user}}
+<br>Firstname:{{user.first_name}}
+<br>Last name:{{user.last_name}}
+
+</p>
+<a href="{%url 'music:editprofile'%}">Click here to edit your profile</a>
+</div>
+{%endblock%}
+

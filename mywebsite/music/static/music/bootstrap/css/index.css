@@ -1,0 +1,28 @@
+.navbar{
+	background-color: red;
+	height:80px;
+
+}
+.collapse>ul>li>a{
+	color:black !important; 
+
+}
+.collapse>ul>li>a:hover {
+	color:white !important;
+}
+.bn{
+	float: right!important;
+	margin-top: 25px;
+}
+.abc{
+	height:50px;
+	width: 50px;
+}
+.slide{
+	margin-top: -20px;
+}
+.media-object{
+	height: 50px;
+	width:50px;
+
+}
