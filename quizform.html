@@ -1,0 +1,134 @@
+{%load static%}
+<div class="row"> <div class="col-sm-3">Course:
+<input  placeholder="Choose Course" name="course" type="text" list="courses" style=""/>
+<datalist id="courses">
+  <option>Math</option>
+  <option>Science</option>
+  <option>Health</option>
+  <option>Computer</option>
+</datalist>
+<br>
+</div>
+<div class="col-sm-3">Topic
+<input  placeholder="Choose Topic" name="topic" type="text" list="topics"/>
+<datalist id="topics">
+  <option>Math</option>
+  <option>Science</option>
+  <option>Health</option>
+  <option>Computer</option>
+</datalist>
+<br>
+</div>
+</div>
+<br>
+
+
+<div id="form1">
+<form id="myform" method="post" action="{% url 'quiz'%}">
+                {%csrf_token%}
+            <div class="row">
+            <div class="col-md-6">
+
+
+                   <p><button class="btn btn-primary" type="button">
+                       Add Questions to Quiz</button></p>
+           <p><textarea name="question" placeholder="Type the question here" class="form-control" id="exampleFormControlTextarea1" rows="3" required="true"></textarea>
+           </p>
+<div class="row" id="optioncontainer">
+<div class="col-sm-6">
+ <label>Options</label>
+    <button id='add_option'>+</button>
+
+<fieldset id="options">
+<div class="row" id="optionrow">
+    <div class="col">
+        <input type="text" name="option1"><button class="remove">x</button>
+    </div>
+</div>
+
+</fieldset>
+</div>
+    <div class="col-sm-6"> <label> Correct Answer:</label>
+       <br><input class="required" type="text" name="correctanswer" required="true">
+</div>
+</div>
+<div id="truefalsecontainer">
+    <p><b>Answers</b></p>
+    <input  type="radio" name="correctanswer" value="true" required>True<br>
+    <input  type="radio" name="correctanswer" value="false">False<br>
+
+</div>
+
+</div>
+<div class="col-md-6">
+    <p><button class="btn btn-warning" type="button">Choose Type</button></p>
+    <input id="mcq" type="radio" name="type" value="mcq">MCQ<br>
+    <input id="truefalse" type="radio" name="type" value="truefalse">TrueFalse<br>
+    <input id="subjective" type="radio" name="type" value="subjective">Subjective<br>
+</div>
+</div>
+<br>
+    <input class="btn btn-success btn-lg" type="submit">
+
+</form>
+<button id="addmore">Add MORE</button>
+
+
+
+
+
+
+
+       </div>
+</div>
+</div>
+
+
+<script type="text/javascript" src="{% static 'js/myjs.js' %}"></script>
+
+<!--<script type="text/javascript">-->
+    <!--$(document).ready(function(){-->
+    <!--$("#optioncontainer").hide()-->
+
+    <!--$("#mcq").click(function (){-->
+       <!--$("#optioncontainer").show()-->
+       <!--$("#truefalsecontainer").hide()-->
+       <!--$("#form")[0].reset();-->
+
+
+
+    <!--});-->
+        <!--$("#truefalse").click(function(){-->
+        <!--$("#optioncontainer").hide()-->
+       <!--$("#truefalsecontainer").show()-->
+       <!--$("#myform")[0].reset();-->
+
+    <!--});-->
+            <!--$("#subjective").click(function(){-->
+       <!--$("#optioncontainer").hide()-->
+              <!--$("#truefalsecontainer").hide()-->
+              <!--$("#form")[0].reset();-->
+
+
+
+
+    <!--});-->
+
+    <!--});-->
+<!--</script>-->
+<!--<script>-->
+
+<!--var i = 1;-->
+<!--var original = document.getElementById('#formbody');-->
+
+<!--function duplicate() {-->
+    <!--var clone = original.cloneNode(true); // "deep" clone-->
+    <!--&lt;!&ndash;clone.input.name = "option" + ++i;&ndash;&gt;-->
+    <!--// or clone.id = ""; if the divs don't need an ID-->
+    <!--original.parentNode.append(clone);-->
+    <!--return false;-->
+    <!--}-->
+<!--</script>-->
+
+
+
