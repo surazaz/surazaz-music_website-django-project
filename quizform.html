@@ -39,18 +39,20 @@
  <label>Options</label>
     <button id='add_option'>+</button>
 
+
 <fieldset id="options">
+
 <div class="row" id="optionrow">
     <div class="col">
-        <input type="text" name="option1"><button class="remove">x</button>
+
+        <input type="text" name="option1"><button class="remove" disabled required>x</button>
+        <input class="whichcorrect" type="radio" name="correctanswer">
     </div>
 </div>
 
 </fieldset>
 </div>
-    <div class="col-sm-6"> <label> Correct Answer:</label>
-       <br><input class="required" type="text" name="correctanswer" required="true">
-</div>
+
 </div>
 <div id="truefalsecontainer">
     <p><b>Answers</b></p>
@@ -62,7 +64,7 @@
 </div>
 <div class="col-md-6">
     <p><button class="btn btn-warning" type="button">Choose Type</button></p>
-    <input id="mcq" type="radio" name="type" value="mcq">MCQ<br>
+    <input id="mcq" type="radio" name="type" value="mcq" checked="True">MCQ<br>
     <input id="truefalse" type="radio" name="type" value="truefalse">TrueFalse<br>
     <input id="subjective" type="radio" name="type" value="subjective">Subjective<br>
 </div>
@@ -72,7 +74,7 @@
 
 </form>
 <button id="addmore">Add MORE</button>
-
+<p id ="aftersubmit"></p>
 
 
 
@@ -130,5 +132,31 @@
     <!--}-->
 <!--</script>-->
 
+<script>
+$(document).on('submit', '#myform', function(){
+x=$(this).parent().attr('id');
+lastchar = x.substr(x.length - 1)
+$.ajax({
+    type: $(this).attr('method'),
+    url: this.action,
+    data: $(this).serialize(),
+    context: this,
+    success: function(data, status) {
+        $(this).attr('hidden',true);
+        <!--x=$(this).parent().attr('id');-->
+        <!--alert(x);-->
 
+        $(this).parent().before("<button id='question'>Question"+lastchar+"</button>");
 
+        alert('question successfully saved');
+    }
+    });
+    return false;
+});
+</script>
+<script>
+  $(document).on('click', '#question', function()
+  {
+  $(this).parent().show();
+  });
+</script>
