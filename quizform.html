@@ -1,0 +1,155 @@
+{%load static%}
+<div class="row">
+<div class="col-md-7">
+<div id="form1">
+<form id="myform" method="post" action="/mainapp/teacher/questioncreate/{{quizid}}/">
+                {%csrf_token%}
+            <div class="row">
+            <div class="col-md-8">
+
+
+                   <p><button class="btn btn-primary" type="button">
+                       Add Questions to Quiz</button></p>
+           <p><textarea name="question" placeholder="Type the question here" class="form-control" id="exampleFormControlTextarea1" rows="3" required="true"></textarea>
+           </p>
+<div class="row" id="optioncontainer">
+<div class="col-sm-8">
+ <label>Options</label>
+    <button id='add_option'>+</button>
+
+
+<fieldset id="options">
+
+<div class="row" id="optionrow">
+    <div class="col">
+
+        <input type="text" name="option1"><button class="remove" disabled required>x</button>
+        <input class="whichcorrect" type="radio" name="correctanswer">
+    </div>
+</div>
+
+</fieldset>
+</div>
+
+</div>
+<div id="truefalsecontainer">
+    <p><b>Answers</b></p>
+    <input  type="radio" name="correctanswer" value="true" required>True
+    <input  type="radio" name="correctanswer" value="false">False
+
+</div>
+
+</div>
+<div class="col-md-2">
+    <p><button class="btn btn-warning" type="button">Choose Type</button></p>
+    <input id="mcq" type="radio" name="type" value="mcq" checked="True">MCQ<br>
+    <input id="truefalse" type="radio" name="type" value="truefalse">TrueFalse<br>
+    <input id="subjective" type="radio" name="type" value="subjective">Subjective<br>
+</div>
+
+</div>
+<br>
+    <input class="btn btn-success btn-lg" type="submit">
+
+</form>
+
+
+
+
+
+
+
+       </div>
+<button id="addmore">Add MORE</button>
+<p id ="aftersubmit"></p>
+</div>
+        <div id='detailbody' class="col-md-5"><h2>Question List</h2>
+
+            <ul class="list-group">
+
+                {% for id,name in questionlist %}
+                <li class="list-group-item" style="overflow-wrap:break-word;"><b>{{name}}</b>
+                    <button id='deletequestion' name="/mainapp/delete/{{quizid}}/{{id}}/" class="btn btn-danger btn-sm" style="float:right;">Delete</button>
+                    <button data-toggle="collapse" data-target="#demo{{id}}" id='questiondetail' name="/mainapp/details/{{id}}/" class="btn btn-info btn-sm" style="float:right;">View Detail</button>
+                    <div id="demo{{id}}" class="collapse">
+                    Lorem ipsum dolor text....
+                    </div>
+                </li>
+
+                {% endfor %}
+                 </ul>
+        </div>
+</div>
+<a href="."><button class="btn btn-info btn-lg" style="align:center;">Finish Quiz</button>
+</a>
+
+
+<script type="text/javascript" src="{% static 'js/myjs.js' %}"></script>
+
+
+<script>
+$(document).on('submit', '#myform', function(){
+x=$(this).parent().attr('id');
+lastchar = x.substr(x.length - 1)
+$.ajax({
+    type: $(this).attr('method'),
+    url: this.action,
+    data: $(this).serialize(),
+    context: this,
+    success: function(data, status) {
+        $(this).hide();
+        $(this).parent().before("<button class='btn btn-primary btn-sm' id='question'>Question"+lastchar+"</button>");
+        <!--to store questionid--as data from httpresponse>
+        $(this).append('<input id="myid" type="text" name="questionid" value="'+data+'" hidden>')
+        alert('Question saved successfully');
+    }
+    });
+    return false;
+});
+</script>
+<script>
+  $(document).on('click', '#question', function()
+  {
+  <!--alert("hello");-->
+  x=$(this).next('div').find('#myform');
+  if (x.is(":visible") == true )
+  x.hide();
+  else
+  x.show();
+  });
+    <!--for deleting question-->
+    $(document).on('click', '#deletequestion', function()
+
+  {
+    var r = confirm("Are you sure to delete this question");
+    if (r == true) {
+      $.ajax({
+    type: "GET",
+    url: $(this).attr('name'),
+    context: this,
+    success: function(data, status) {
+        alert(data);
+        $(this).parent().hide();
+    }
+    });
+}});
+
+    <!--for viewing question-->
+    $(document).on('click', '#questiondetail',function()
+    {
+      $.ajax({
+    type: "GET",
+    url: $(this).attr('name'),
+    context: this,
+    success: function(data, status) {
+    x=$(this).attr('data-target');
+    var details;
+    for(i in data){
+    details+=('<b>'+i+':</b>'+data[i]+'<br>');
+    }
+    $(x).html(details);
+    }
+    });
+});
+
+</script>
