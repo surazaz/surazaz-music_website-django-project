@@ -1,0 +1,140 @@
+{%load static%}
+<div class="row">
+<div class="col-md-7">
+
+<div id="form1">
+    <p id="editheader"></p>
+<form id="myform" method="post" action="/mainapp/teacher/questioncreate/{{quizid}}/">
+                {%csrf_token%}
+            <div class="row">
+            <div class="col-md-8">
+
+
+
+                <h2>Question</h2>
+           <p><textarea name="question" placeholder="Type the question here" class="form-control" id="exampleFormControlTextarea1" rows="3" required="true"></textarea>
+           </p>
+<div class="row" id="optioncontainer">
+<div class="col-sm-12">
+ <label>Options</label>
+    <button id='add_option'>+</button>
+
+
+<fieldset id="options">
+
+<div class="row" id="optionrow">
+    <div class="col">
+
+        <input type="text" name="option1" required><button id="remove" class="btn btn-danger btn-sm" disabled required>x</button>&nbsp&nbsp
+        <label><input class="whichcorrect" type="radio" name="correctanswer" value="option1">Correct</label>
+    </div>
+</div>
+
+</fieldset>
+</div>
+
+</div>
+<div id="truefalsecontainer">
+    <b>Answer:</b>
+
+    <h4><input type="radio" name="correctanswer" value="true" required>True<br>
+    <input  type="radio" name="correctanswer" value="false">False</h4>
+
+</div>
+
+</div>
+<div class="col-md-3">
+    <p>Type</p>
+    <input id="mcq" type="radio" name="type" value="mcq" checked="True">MCQ<br>
+    <input id="truefalse" type="radio" name="type" value="truefalse">TrueFalse<br>
+    <input id="subjective" type="radio" name="type" value="subjective">Subjective<br>
+</div>
+
+</div>
+    <!--for editing we need idfield as hidden-->
+    <p id="idfield"></p>
+    <br><input class="btn btn-success btn" type="submit" value="Save">
+
+
+</form>
+
+</div>
+    <button id="add_question">Add Question</button></div>
+
+
+    {%if questionlist%}
+    <div id='detailbody' class="col-md-5"><h2>QuizQuestion List</h2>
+
+            <ul id="question_list_area" class="list-group">
+                {% for id,name in questionlist %}
+                <li id='myquestionlist' class="list-group-item" style="overflow-wrap:break-word;"><b>{{name}}</b><br>
+                    <button id='deletefromquiz' name="/mainapp/remove_from_quiz/{{quizid}}/{{id}}/" class="btn btn-danger btn-sm" style="float:initial;">Remove</button>
+                    <button id='editform' name="/mainapp/details/{{id}}/" class="btn btn-success btn-sm" style="float:initial;" value="{{id}}">Edit</button>
+                    <button data-toggle="collapse" data-target="#demo{{id}}" id='questiondetail' name="/mainapp/details/{{id}}/" class="btn btn-info btn-sm"  style="float:initial;">Details</button>
+                    <div id="demo{{id}}" class="collapse">
+
+                    </div>
+                </li>
+
+                {% endfor %}
+
+                 </ul>
+        </div>
+    {%endif%}
+</div>
+        {%if allquestionlist%}
+    <div id='detailbody'><h2>Recommended Questions</h2>
+
+            <ul id="question_list_area" class="list-group">
+                {% for id,name in allquestionlist %}
+                <li id='myquestionlist' class="list-group-item" style="overflow-wrap:break-word;"><b>{{name}}</b><br>
+                    <button data-toggle="collapse" data-target="#demo{{id}}" id='questiondetail' name="/mainapp/details/{{id}}/" class="btn btn-info"  style="float:right; margin-right:14px;">Details</button>
+                    <button id="addtoquiz" name="/mainapp/add_to_quiz/{{quizid}}/{{id}}/"class="btn btn-success"  style="float:right;margin-right:25px;">Add to Quiz</button>
+
+                    <div id="demo{{id}}" class="collapse">
+
+                    </div>
+                </li>
+
+                {% endfor %}
+
+                 </ul>
+        </div>
+    {%endif%}
+
+
+
+<script type="text/javascript" src="{% static 'js/myjs.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/question.js' %}"></script>
+<script type="text/javascript">
+            $(document).on('click', '#addtoquiz',function(){
+            $.ajax({
+    type: "GET",
+    url: $(this).attr('name'),
+    context: this,
+    success: function(data, status) {
+    alert(data);
+    location.reload(true);
+
+
+    }
+    });
+});
+
+    <!--for deleting question-->
+    $(document).on('click', '#deletefromquiz', function()
+  {
+    var r = confirm("Are you sure to delete this question from quiz??");
+    if (r == true) {
+      $.ajax({
+    type: "GET",
+    url: $(this).attr('name'),
+    context: this,
+    success: function(data, status) {
+        $(this).parent().hide();
+    }
+    });
+}});
+</script>
+
+
