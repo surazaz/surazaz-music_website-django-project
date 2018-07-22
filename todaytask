@@ -22,3 +22,5 @@ def submitanswer(request, quizid, qid):
         return HttpResponse(data)
     else:
         return sign(request)
+
+    path('answer/<str:quizid>/<str:qid>/',views.submitanswer,name="submitanswer"),
