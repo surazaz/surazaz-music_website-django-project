@@ -1,0 +1,24 @@
+
+def submitanswer(request, quizid, qid):
+    token = gettoken()
+    if token:
+        user=authe.current_user
+        uid=user['localId']
+        if request.method=="POST" and request.is_ajax:
+            request.POST._mutable = True
+            r = request.POST
+            del r['csrfmiddlewaretoken']
+            correctans=db.child("Questions").child(qid).child('correctanswer').get(token).val()
+            questype=db.child("Questions").child(qid).child('type').get(token).val()
+            if questype=="subjective":
+                data="this is a subjective question"
+            else:
+                if correctans==r['answer']:
+                    data="you are correct"
+                else:
+                    data="You are incorrect....The correct answer is"+correctans
+
+            db.child("Answers").child(uid).child(quizid).child(qid).update(r, token)
+        return HttpResponse(data)
+    else:
+        return sign(request)
