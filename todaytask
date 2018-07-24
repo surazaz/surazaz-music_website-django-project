@@ -1,24 +1,70 @@
+def getworkout():
+    import datetime
+    current = datetime.datetime.now()
+    x=current.hour
+    workout_time=""
+    if x>=4 and x<=9:
+        workout_time="morning"
+    elif x>=10 and x<=15:
+        workout_time="afternoon"
+    if x>=16 and x<=21:
+        workout_time="evening"
+    if x>=22 and x<=3:
+        workout_time="night"
+    return workout_time
 
-def submitanswer(request, quizid, qid):
+
+def submitanswer(request, quizid, qid, attempt_id):
     token = gettoken()
     if token:
-        user=authe.current_user
-        uid=user['localId']
-        if request.method=="POST" and request.is_ajax:
+        user = authe.current_user
+        uid = user['localId']
+        std_info=db.child("Users").child("Student").child(uid).get(token).val()
+        mark=db.child("Results").child(uid).child(quizid).child(attempt_id).child('total_correctans').get(token).val()
+        no_of_correctans = int(mark)
+        print(no_of_correctans)
+        if request.method == "POST" and request.is_ajax:
             request.POST._mutable = True
             r = request.POST
             del r['csrfmiddlewaretoken']
-            correctans=db.child("Questions").child(qid).child('correctanswer').get(token).val()
-            questype=db.child("Questions").child(qid).child('type').get(token).val()
-            if questype=="subjective":
-                data="this is a subjective question"
-            else:
-                if correctans==r['answer']:
-                    data="you are correct"
-                else:
-                    data="You are incorrect....The correct answer is"+correctans
 
-            db.child("Answers").child(uid).child(quizid).child(qid).update(r, token)
+            correctans = db.child("Questions").child(qid).child('correctanswer').get(token).val()
+            questype = db.child("Questions").child(qid).child('type').get(token).val()
+
+            if questype == "subjective":
+                data = "this is a subjective question"
+                iscorrect=""
+            else:
+                if correctans == r['answer']:
+                    data = "you are correct"
+                    db.child("Results").child(uid).child(quizid).child(attempt_id).update({'total_correctans':no_of_correctans + 1},token)
+                    iscorrect=1
+                else:
+                    data = "You are incorrect....The correct answer is" + correctans
+                    iscorrect=0
+
+
+            db.child("Results").child(uid).child(quizid).child(attempt_id).child(qid).update(r, token)
+            #for workout time
+
+            quesans={
+                "quizattempt":attempt_id,
+                "student_id":uid,
+                "time_taken":r['time_taken'],
+                "workout_time":getworkout(),
+                "iscorrect":iscorrect,
+                "questionid":qid,
+                "gender":std_info['gender'],
+                "special_care_needed":std_info['special_care_needed'],
+                "subject_of_interest":std_info['subject_of_interest'],
+                "grade":std_info['grade'],
+
+            }
+            db.child('Evaluations').push(quesans,token)
+        return HttpResponse(data)
+    else:
+        return sign(request)
+
         return HttpResponse(data)
     else:
         return sign(request)
