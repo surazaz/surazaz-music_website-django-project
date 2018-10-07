@@ -1,0 +1,21 @@
+import pandas as pd
+import openpyxl
+result=[]
+with open("sample.txt", "r") as ins:
+    for line in ins:
+        x=line.split()
+
+        if len(x)==14:
+            x[5:8] = ['-'.join(x[5:8])]
+            x[6:12]=['-'.join(x[6:12])]
+            result.append(x)
+        elif len(x)==9 and (x[-1]=="RECORD.AUTOMATICALLY.OPENED" or x[-1].__contains__('IBT')):
+            x[5:8] = ['-'.join(x[5:8])]
+            result.append(x)
+df=pd.DataFrame(result,columns=["TRANS.REFERENCE","ACCT/CATEG/CRF","AC COM","LCY AMOUNT","EXCH.RATE CCY","VAL DATE","TITLE OF CATEG/AC"])
+# print(df.head())
+# print(df.tail())
+# print(df.to_csv('final-record.csv',index=True,encoding='utf-8'))
+writer = pd.ExcelWriter('output.xlsx')
+df.to_excel(writer,'Sheet1')
+writer.save()
